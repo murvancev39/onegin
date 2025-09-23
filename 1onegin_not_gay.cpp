@@ -15,6 +15,7 @@ void output (char str_array[][47], const int NSTR);
 int main ()
 {
     const int NSTR = 5332;
+    const int MAXLEN = 47;
     char str_array[5332][47]={0};
     onegin_array (str_array, "textonegin.txt");
     
