@@ -6,22 +6,23 @@
 // TODO сделай отдельный проект и разнеси по файлам функции логично
 
 //void param_Onegin (int *maxLen, FILE *text);
-int onegin_array (char str_array[][47], const char* string);
-void buble_str_array (char str_array[][47], int S_number);
+int onegin_array (char str_array[], const char* string);
+void buble_str_array (char str_array[], int S_number, const int n);
 int my_strcmp (const char* str1, const char* str2);
-void output (char str_array[][47], const int NSTR);
+void output (char str_array[], const int NSTR, const int n);
 //ssize_t my_getline (char **lineptr, int *n, FILE *stream);
 
 int main ()
 {
     const int NSTR = 5332;
     const int MAXLEN = 47;
-    char str_array[5332][47]={0};
+
+    char str_array[NSTR*MAXLEN]={0};
     onegin_array (str_array, "textonegin.txt");
     
-    buble_str_array (str_array, NSTR);
+    buble_str_array (str_array, NSTR, MAXLEN);
 
-    output (str_array, NSTR);
+    output (str_array, NSTR, MAXLEN);
     return 0;
     
 }
@@ -52,7 +53,7 @@ void param_Onegin (int *maxLen, FILE *text)
 
 // TODO fstat or fseek for filesize
 // TODO not magic number, count lines max len line
-int onegin_array (char str_array[][47], const char* string) // TODO without magic size number
+int onegin_array (char str_array[], const char* string) // TODO without magic size number
 {
     // TODO asserts
     assert(str_array);
@@ -64,13 +65,13 @@ int onegin_array (char str_array[][47], const char* string) // TODO without magi
     }
 
     int str_num = 0;
-
     const int n = 47;
+
     char str[n] = {0};
     
     while (fgets(str, n, text) != NULL)
     {
-        strcpy(str_array[str_num], str);
+        strcpy((str_array + n * str_num), str);
         str_num++;
     }
     fclose(text);
@@ -78,7 +79,7 @@ int onegin_array (char str_array[][47], const char* string) // TODO without magi
     return 1;
 }
 
-void buble_str_array (char str_array[][47], int S_number)
+void buble_str_array (char str_array[], int S_number, const int n)
 {
     assert(str_array);
 
@@ -87,13 +88,13 @@ void buble_str_array (char str_array[][47], int S_number)
     {
         for (int ii = 0 ; ii < (S_number - i - 1) ; ii++)
         {
-            if (my_strcmp(str_array[ii], str_array[ii+1]) > 0)
+            if (my_strcmp((str_array + ii*n), (str_array + (ii+1) * n)) > 0)
             {
-                strcpy (swap_str, str_array [ii]);
+                strcpy (swap_str, (str_array + ii*n));
                 // printf("swap_str: %s\nstr_array[i] %s\n", swap_str, str_array[i]);
                 
-                strcpy (str_array [ii], str_array [ii+1]);
-                strcpy ( str_array [ii+1], swap_str);
+                strcpy ((str_array + ii*n), (str_array + (ii+1) * n));
+                strcpy ( (str_array + (ii+1) * n), swap_str);
                 // printf("%s", swap_str);
             }
             
@@ -122,13 +123,13 @@ void buble_str_array (char str_array[][47], int S_number)
     return;
 }
 
-void output (char str_array[][47], const int NSTR) // TODO FILE* parameter
+void output (char str_array[], const int NSTR, const int n) // TODO FILE* parameter
 {
     int str_num = 0;
 
     while (str_num < NSTR)
     {
-        printf ("%s", str_array[str_num]);
+        printf ("%s", (str_array + str_num * n));
         str_num++;
     }
     return;
