@@ -28,10 +28,10 @@ int main ()
 
     const int LEN_ONEGIN = func_len_oneg (TEXTIN);
 
-    char onegin_array [LEN_ONEGIN] = {};
-    const int NSTR = fill_onegin_array (onegin_array, TEXTIN);
-
-    struct poi_len structpointlen [NSTR] = {0};
+    char *onegin_array = (char *) malloc (LEN_ONEGIN * sizeof (char));
+    int NSTR = fill_onegin_array (onegin_array, TEXTIN);
+    
+    struct poi_len *structpointlen = (struct poi_len *) malloc (NSTR * sizeof (struct poi_len));
     fill_pointer_array (structpointlen, onegin_array, LEN_ONEGIN);
 
     struct poi_len* point_struct_array [NSTR] = {};
@@ -123,6 +123,30 @@ void alphabet_buble (struct poi_len* *point_struct_array, const int NSTR)
 
     for (int i = 0; i < (NSTR); i++)
     {
+        //printf ("i: %d\n", i);
+        for (int j = 0; j < (NSTR - i - 1); j++)
+        {
+            if (my_strcmp (point_struct_array[j]->point, (point_struct_array [j+1]->point)) > 0)
+            {
+                
+                swap_poi_len = point_struct_array [j]; 
+                point_struct_array [j] = point_struct_array [j+1];
+                point_struct_array [j+1] = swap_poi_len;
+                //printf ("%d\n", j);
+            }
+            //printf ("j: %d\n", j);
+        }
+    }
+    return;
+}
+
+void rhyme_buble (struct poi_len* *point_struct_array, const int NSTR)
+{
+    assert (point_struct_array);
+    struct poi_len* swap_poi_len = {};
+
+    for (int i = 0; i < (NSTR); i++)
+    {
         printf ("i: %d\n", i);
         for (int j = 0; j < (NSTR - i - 1); j++)
         {
@@ -139,14 +163,8 @@ void alphabet_buble (struct poi_len* *point_struct_array, const int NSTR)
     }
     return;
 }
-/*
-void rhyme_buble (struct poi_len* *point_struct_array, const int NSTR)
-{
-    assert (point_struct_array);
-    struct poi_len* swap
-}
-*/
-int my_strcmp (const char* str1, const char* str2)
+
+int my_strcmp (const char* str1, const char* str2, char )
 {
     int i1 = 0;
     int i2 = 0;
